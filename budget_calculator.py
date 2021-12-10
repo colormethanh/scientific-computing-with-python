@@ -18,7 +18,7 @@ class Category():
             desc = f"{d:<23}{a[:7]:>7}\n"
             self.led_desc.append(desc)
 
-        self.led_desc.append(f"Total: ${self.get_balance():<23.2f}")
+        self.led_desc.append(f"Total: {self.get_balance():<23.2f}")
         message = "".join(self.led_desc)
         return(str(message))
 
@@ -70,6 +70,7 @@ Food.withdraw(500, "first withdraw")
 Entertainment = Category("Entertainment")
 Entertainment.deposit(500, "strip club")  
 Food.transfer(500, Entertainment)
+Entertainment.transfer(1000, Food)
 
 print(Entertainment)
 print(Food)
