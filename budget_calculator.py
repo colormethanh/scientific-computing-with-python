@@ -68,8 +68,10 @@ Food.deposit(2000, "second deposit")
 Food.withdraw(500, "first withdraw")
 
 Entertainment = Category("Entertainment")
-Entertainment.deposit(500, "strip club")  
+Entertainment.deposit(500, "strip club")
 Food.transfer(500, Entertainment)
 
 print(Entertainment)
 print(Food)
+
+print("added some stuff from computer")
