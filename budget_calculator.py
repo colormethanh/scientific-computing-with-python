@@ -52,11 +52,11 @@ class Category():
             return(False)
 
     def transfer(self, amount, destination):
-        amount = 0 - amount
+        amount_with = 0 - amount
 
         if self.check_funds(amount):
-            self.withdraw(amount, f"transfer to {destination}")
-            destination.deposit(amount, f"transfer from {self.name}")
+            self.withdraw(amount_with, f"Transfer to {destination.name}")
+            destination.deposit(amount, f"Transfer from {self.name}")
             return(True)
         else:
             return(False)
@@ -66,10 +66,10 @@ Food = Category("Food")
 Food.deposit(1000, "initial deposit")
 Food.deposit(2000, "second deposit")
 Food.withdraw(500, "first withdraw")
-print(Food.ledger)
-print(Food)
 
-Entertainment = Category("Entertainment")
+Entertainment = Category("Entertainment")
+Entertainment.deposit(500, "strip club")  
 Food.transfer(500, Entertainment)
-Entertainment.deposit(500, "strip club")
+
 print(Entertainment)
+print(Food)
