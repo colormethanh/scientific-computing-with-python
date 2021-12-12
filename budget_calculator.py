@@ -61,6 +61,11 @@ class Category():
         else:
             return(False)
 
+def create_spend_chart(*categories):
+    for i in categories:
+        funds = i.get_balance()
+        
+        print(funds)
 
 Food = Category("Food")
 Food.deposit(1000, "initial deposit")
@@ -74,5 +79,4 @@ Entertainment.transfer(1000, Food)
 
 print(Entertainment)
 print(Food)
-
-print("added some stuff from computer")
+create_spend_chart(Entertainment, Food)
