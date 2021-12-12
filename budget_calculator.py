@@ -52,31 +52,56 @@ class Category():
             return(False)
 
     def transfer(self, amount, destination):
-        amount_with = 0 - amount
 
         if self.check_funds(amount):
-            self.withdraw(amount_with, f"Transfer to {destination.name}")
+            self.withdraw(amount, f"Transfer to {destination.name}")
             destination.deposit(amount, f"Transfer from {self.name}")
             return(True)
         else:
             return(False)
 
+
 def create_spend_chart(*categories):
-    for i in categories:
-        funds = i.get_balance()
-        
-        print(funds)
+    """
+    A funtion that collects a list of categories and prints out them
+    average spent by categories
+    """
+    total_spent = 0
+    cat_lst = []
 
-Food = Category("Food")
-Food.deposit(1000, "initial deposit")
-Food.deposit(2000, "second deposit")
-Food.withdraw(500, "first withdraw")
+    # looping through the categories and making a cat_dic for them
+    for cat in categories:
+        cat_dic = {"name": cat.name, "spending": 0}
+        cat_lst.append(cat_dic)
 
-Entertainment = Category("Entertainment")
-Entertainment.deposit(500, "strip club")
-Food.transfer(500, Entertainment)
-Entertainment.transfer(1000, Food)
+        # getting total withdraws of all categories and invidual categories
+        for item in cat.ledger:
+            if item.get("amnt") < 0:
+                spending = abs(item.get("amnt"))
+                total_spent += spending
+                cat_dic["spending"] += spending
 
-print(Entertainment)
-print(Food)
-create_spend_chart(Entertainment, Food)
+    for dic in cat_lst:
+        average = round((dic.get("spending") / total_spent) * 100)
+        dic["average"] = average
+
+    print(cat_lst)
+    print(f"Total amount spent: {total_spent}")
+
+
+food = Category("food")
+food.deposit(900, "deposit")
+entertainment = Category("entertainment")
+entertainment.deposit(900, "deposit")
+business = Category("business")
+business.deposit(900, "deposit")
+
+food.withdraw(105.55)
+entertainment.withdraw(33.40)
+business.withdraw(10.99)
+
+print(food)
+print(entertainment)
+print(business)
+
+create_spend_chart(food, entertainment, business)
