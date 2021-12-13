@@ -6,7 +6,7 @@ class Category():
     """
 
     def __init__(self, name):
-        self.name = name
+        self.name = name.title()
         self.ledger = []
         self.led_desc = [f"{self.name:*^30}\n", ]
 
@@ -68,6 +68,24 @@ def create_spend_chart(*categories):
     """
     total_spent = 0
     cat_lst = []
+    spend_chart = [
+        ["Percentage spent by category"],
+        ["100|", ],
+        [f"{90:>3}|", ],
+        [f"{80:>3}|", ],
+        [f"{70:>3}|", ],
+        [f"{60:>3}|", ],
+        [f"{50:>3}|", ],
+        [f"{40:>3}|", ],
+        [f"{30:>3}|", ],
+        [f"{20:>3}|", ],
+        [f"{10:>3}|", ],
+        [f"{0:>3}|", ],
+    ]
+
+    spend_name = [
+        [f"    {'_' * 10}"]
+    ]
 
     # looping through the categories and making a cat_dic for them
     for cat in categories:
@@ -81,12 +99,23 @@ def create_spend_chart(*categories):
                 total_spent += spending
                 cat_dic["spending"] += spending
 
+    # Getting the percent of total from each category
     for dic in cat_lst:
         average = round((dic.get("spending") / total_spent) * 100)
         dic["average"] = average
 
     print(cat_lst)
     print(f"Total amount spent: {total_spent}")
+
+    for col in spend_chart:
+        for row in col:
+            print(row)
+
+    for col_1 in spend_name:
+        for row_1 in col_1:
+            print(row_1)
+
+    for cat in cat_dic:
 
 
 food = Category("food")
@@ -99,9 +128,5 @@ business.deposit(900, "deposit")
 food.withdraw(105.55)
 entertainment.withdraw(33.40)
 business.withdraw(10.99)
-
-print(food)
-print(entertainment)
-print(business)
 
 create_spend_chart(food, entertainment, business)
