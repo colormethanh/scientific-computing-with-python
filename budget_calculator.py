@@ -68,8 +68,8 @@ def create_spend_chart(*categories):
     """
     total_spent = 0
     cat_lst = []
-    spend_chart = [
-        ["Percentage spent by category"],
+    name_lst = []
+    row_percentage = [
         ["100|", ],
         [f"{90:>3}|", ],
         [f"{80:>3}|", ],
@@ -82,15 +82,13 @@ def create_spend_chart(*categories):
         [f"{10:>3}|", ],
         [f"{0:>3}|", ],
     ]
-
-    spend_name = [
-        [f"    {'_' * 10}"]
-    ]
+    row_names = []
 
     # looping through the categories and making a cat_dic for them
     for cat in categories:
         cat_dic = {"name": cat.name, "spending": 0}
         cat_lst.append(cat_dic)
+        name_lst.append(cat.name)
 
         # getting total withdraws of all categories and invidual categories
         for item in cat.ledger:
@@ -104,18 +102,37 @@ def create_spend_chart(*categories):
         average = round((dic.get("spending") / total_spent) * 100)
         dic["average"] = average
 
-    print(cat_lst)
-    print(f"Total amount spent: {total_spent}")
+    # populating the percentage chart
+    title = "Percentage spent by category"
+    ct = 100
+    for row in row_percentage:
+        for cat in cat_lst:
+            if cat.get("average") >= ct:
+                row.append("o ")
+            else:
+                row.append("  ")
+        ct = ct - 10
 
-    for col in spend_chart:
-        for row in col:
-            print(row)
+    print(title)
+    for row in row_percentage:
+        print(" ".join(row))
 
-    for col_1 in spend_name:
-        for row_1 in col_1:
-            print(row_1)
+    # populating names
+    seperator = f"    {'-' * (len(' '.join(row_percentage[10])) - 3)}"
+    longest_name = len(max(name_lst, key=len))
+    for i, name in enumerate(name_lst):
+        name = f"{name:<{longest_name}}"
+        name_lst[i] = name
 
-    for cat in cat_dic:
+    for row in range(0, longest_name):
+        r = []
+        for name in name_lst:
+            r.append(f"{name[row]}")
+        row_names.append(f"     {'  '.join(r)}")
+
+    print(seperator)
+    for row in row_names:
+        print(row)
 
 
 food = Category("food")
@@ -128,5 +145,7 @@ business.deposit(900, "deposit")
 food.withdraw(105.55)
 entertainment.withdraw(33.40)
 business.withdraw(10.99)
+
+print(food)
 
 create_spend_chart(food, entertainment, business)
