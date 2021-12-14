@@ -11,10 +11,10 @@ class Category():
         self.led_desc = [f"{self.name:*^30}\n", ]
 
     def __str__(self):
-
         for i in self.ledger:
-            d = i.get('des')[:23] if len(i.get('des')) > 23 else i.get('des')
-            a = f"{i.get('amnt'):.2f}"
+            d = i.get('description')[:23] if len(
+                i.get('description')) > 23 else i.get('description')
+            a = f"{i.get('amount'):.2f}"
             desc = f"{d:<23}{a[:7]:>7}\n"
             self.led_desc.append(desc)
 
@@ -23,7 +23,7 @@ class Category():
         return(str(message))
 
     def get_balance(self):
-        balance = sum([i.get("amnt") for i in self.ledger])
+        balance = sum([i.get("amount") for i in self.ledger])
         return(balance)
 
     def check_funds(self, amount):
@@ -34,8 +34,8 @@ class Category():
 
     def deposit(self, amount, description=""):
         dep = {
-            "amnt": amount,
-            "des": description,
+            "amount": amount,
+            "description": description,
         }
         self.ledger.append(dep)
 
@@ -43,8 +43,8 @@ class Category():
         amount = 0 - amount
         if self.check_funds(amount):
             wdrw = {
-                "amnt": amount,
-                "des": description
+                "amount": amount,
+                "description": description
             }
             self.ledger.append(wdrw)
             return(True)
@@ -82,8 +82,8 @@ def create_spend_chart(*categories):
         [f"{10:>3}|", ],
         [f"{0:>3}|", ],
     ]
-    row_names = []
 
+    final_chart = []
     # looping through the categories and making a cat_dic for them
     for cat in categories:
         cat_dic = {"name": cat.name, "spending": 0}
@@ -92,8 +92,8 @@ def create_spend_chart(*categories):
 
         # getting total withdraws of all categories and invidual categories
         for item in cat.ledger:
-            if item.get("amnt") < 0:
-                spending = abs(item.get("amnt"))
+            if item.get("amount") < 0:
+                spending = abs(item.get("amount"))
                 total_spent += spending
                 cat_dic["spending"] += spending
 
@@ -104,6 +104,7 @@ def create_spend_chart(*categories):
 
     # populating the percentage chart
     title = "Percentage spent by category"
+    final_chart.append(f"{title}\n")
     ct = 100
     for row in row_percentage:
         for cat in cat_lst:
@@ -111,28 +112,28 @@ def create_spend_chart(*categories):
                 row.append("o ")
             else:
                 row.append("  ")
+        final_chart.append(f"{' '.join(row)} \n")
         ct = ct - 10
 
-    print(title)
-    for row in row_percentage:
-        print(" ".join(row))
-
     # populating names
-    seperator = f"    {'-' * (len(' '.join(row_percentage[10])) - 3)}"
+    seperator = f"    {'-' * (len(' '.join(row_percentage[0])) - 3)}\n"
+    final_chart.append(seperator)
     longest_name = len(max(name_lst, key=len))
     for i, name in enumerate(name_lst):
-        name = f"{name:<{longest_name}}"
+        name = f"{name:<{longest_name}}"  # padding out the names with spaces
         name_lst[i] = name
 
     for row in range(0, longest_name):
-        r = []
+        r = ["    "]
         for name in name_lst:
-            r.append(f"{name[row]}")
-        row_names.append(f"     {'  '.join(r)}")
+            r.append(f"{name[row]} ")
+        if row != longest_name - 1:
+            final_chart.append(f"{' '.join(r)} \n")
+        else:
+            final_chart.append(f"{' '.join(r)} ")
 
-    print(seperator)
-    for row in row_names:
-        print(row)
+    print("".join(final_chart))
+    return("".join(final_chart))
 
 
 food = Category("food")
@@ -145,7 +146,5 @@ business.deposit(900, "deposit")
 food.withdraw(105.55)
 entertainment.withdraw(33.40)
 business.withdraw(10.99)
-
-print(food)
 
 create_spend_chart(food, entertainment, business)
