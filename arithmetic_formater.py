@@ -1,8 +1,3 @@
-"""
-Link: https://replit.com/@ThanhNguyen117/boilerplate-arithmetic-formatter-3#arithmetic_arranger.py
-"""
-
-
 import operator
 
 inputs = ["32 + 698", "3801 + 2", "45 + 43", "123 + 49"]
@@ -31,7 +26,7 @@ for i in prblm_lst:  # checking for multiple valid criteria
     if len(i['num_1']) > 4 or len(i['num_2']) > 4:  # checking for legnt error
         print("Error: Numbers cannot be more than 4 digits")
 
-    if not i['num_1'].isdecimal() or not i['num_2'].isdecimal():  # checking for operand error
+    if not i['num_1'].isdecimal() or not i['num_2'].isdecimal():
         print("Error: Numbers must only contain digits.")
         exit()
 
@@ -52,7 +47,8 @@ seperator = " " * 4
 cnt = 0
 for i in prblm_lst:
 
-    longest = len(i['num_1']) if len(i['num_1']) > len(i['num_2']) else len(i['num_2'])
+    longest = len(i['num_1']) if len(i['num_1']) > len(i['num_2']) else len(
+        i['num_2'])
     lnth_1 = len(i['num_1'])
     lnth_2 = len(i['num_2'])
 
