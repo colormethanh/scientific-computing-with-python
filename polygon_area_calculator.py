@@ -56,18 +56,19 @@ class Square(Retangle):
     """
 
     def __init__(self, side):
-        self.side = side
-        self.width = self.side
-        self.height = self.side
+        self.width, self.height = side, side
 
     def __str__(self):
-        return(f"Square(side={self.side})")
+        return(f"Square(side={self.width})")
+
+    def set_side(self, n_side):
+        self.width, self.height = n_side, n_side
 
     def set_width(self, width):
-        self.side = width
+        self.width, self.height = width, width
 
     def set_height(self, height):
-        self.side = height
+        self.width, self.height = height, height
 
 
 rect = Retangle(16, 8)
@@ -82,8 +83,7 @@ print(n_rect.get_picture())
 print(rect.get_amount_inside(n_rect))
 
 sqr = Square(4)
-print(sqr)
+print(sqr.width)
 
-sqr.set_width(5)
-print(sqr.height)
-print(sqr)
+sqr.set_side(10)
+print(sqr.width)
